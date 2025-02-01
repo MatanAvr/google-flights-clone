@@ -22,6 +22,7 @@ export const IconInput = ({
 }: IconInputProps) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<AirportSuggestion[]>([]);
+  const [suggestionsFallback, setSuggestionsFallback] = useState<string[]>();
   const [isLoading, setIsLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [isSelected, setIsSelected] = useState<boolean>(false);
@@ -37,7 +38,11 @@ export const IconInput = ({
         }
         setIsLoading(true);
         const results = await fetchOptions(searchTerm);
-        setSuggestions(results);
+        if (results) {
+          setSuggestions(results);
+        } else {
+          setSuggestionsFallback(["No matching locations found"]);
+        }
       } catch (e) {
         console.error(e);
       } finally {
@@ -120,6 +125,15 @@ export const IconInput = ({
               {option.presentation.suggestionTitle}
             </li>
           ))}
+          {suggestionsFallback &&
+            suggestionsFallback.map((option, index) => (
+              <li
+                key={`option-` + index}
+                className="p-2 hover:bg-gray-100 cursor-pointer"
+              >
+                {option}
+              </li>
+            ))}
         </ul>
       )}
     </div>
