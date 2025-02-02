@@ -10,6 +10,7 @@ export type SearchDataKeys =
   | "adults";
 
 export type FlightType = "One-way" | "Round trip";
+
 export type SearchData = {
   type: FlightType;
   returnDate: string;
